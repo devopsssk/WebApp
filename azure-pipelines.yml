@@ -22,6 +22,11 @@ steps:
 
 - task: NuGetToolInstaller@1
 
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+    restoreDirectory: '..\packages'
+
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
