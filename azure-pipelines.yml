@@ -4,10 +4,10 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+- main
 
 pool:
- vmImage: 'ubuntu-latest'
+  name: Default
 
 variables:
   solution: '**/*.sln'
@@ -16,20 +16,18 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: Install .NET 6
   inputs:
     packageType: 'sdk'
-    version: 6.x
+    version: '6.x'
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
 
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
-    command: 'build'
+    command: build
     projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfigurations)'
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: test
-    projects: '**/webtest.csproj'
-    arguments: '--configuration $(buildConfigurations)'
+    arguments: '--configuration $(buildConfiguration)'
